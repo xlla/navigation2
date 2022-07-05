@@ -159,14 +159,15 @@ public:
    */
   virtual BT::NodeStatus check_future()
   {
-    auto elapsed = (node_->now() - sent_time_).to_chrono<std::chrono::milliseconds>();
+    auto elapsed = (node_->now() - sent_time_).template to_chrono<std::chrono::milliseconds>();
+        // auto elapsed = std::chrono::nanoseconds((node_->now() - sent_time_).nanoseconds());
     auto remaining = server_timeout_ - elapsed;
 
     if (remaining > std::chrono::milliseconds(0)) {
       auto timeout = remaining > bt_loop_duration_ ? bt_loop_duration_ : remaining;
 
       rclcpp::FutureReturnCode rc;
-      rc = callback_group_executor_.spin_until_future_complete(future_result_, server_timeout_);
+      rc = callback_group_executor_.spin_until_future_complete(future_result_, timeout);
       if (rc == rclcpp::FutureReturnCode::SUCCESS) {
         request_sent_ = false;
         BT::NodeStatus status = on_completion(future_result_.get());
@@ -175,7 +176,8 @@ public:
 
       if (rc == rclcpp::FutureReturnCode::TIMEOUT) {
         on_wait_for_result();
-        elapsed = (node_->now() - sent_time_).to_chrono<std::chrono::milliseconds>();
+        elapsed = (node_->now() - sent_time_).template to_chrono<std::chrono::milliseconds>();
+        // auto elapsed = std::chrono::nanoseconds((node_->now() - sent_time_).nanoseconds());
         if (elapsed < server_timeout_) {
           return BT::NodeStatus::RUNNING;
         }
