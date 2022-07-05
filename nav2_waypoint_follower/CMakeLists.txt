@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(nav2_waypoint_follower)
+add_compile_options(-mmacosx-version-min=10.14)
+
+set (CMAKE_C_COMPILER /usr/local/opt/llvm/bin/clang)
+set (CMAKE_CXX_COMPILER /usr/local/opt/llvm/bin/clang++)
 
 # Try for OpenCV 4.X, but settle for whatever is installed
 find_package(OpenCV 4 QUIET)
@@ -25,7 +29,7 @@ find_package(pluginlib REQUIRED)
 
 nav2_package()
 
-link_libraries(stdc++fs)
+link_libraries(c++)
 
 include_directories(
   include
@@ -73,7 +77,10 @@ add_library(wait_at_waypoint SHARED plugins/wait_at_waypoint.cpp)
 ament_target_dependencies(wait_at_waypoint ${dependencies})
 
 add_library(photo_at_waypoint SHARED plugins/photo_at_waypoint.cpp)
+link_directories(/usr/local/opt/llvm/lib)
 ament_target_dependencies(photo_at_waypoint ${dependencies})
+target_compile_features(photo_at_waypoint PRIVATE cxx_std_17)
+
 
 add_library(input_at_waypoint SHARED plugins/input_at_waypoint.cpp)
 ament_target_dependencies(input_at_waypoint ${dependencies})
