@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(nav2_constrained_smoother)
+add_compile_options(-mmacosx-version-min=10.14)
 
 set(CMAKE_BUILD_TYPE Release) # significant Ceres optimization speedup
 

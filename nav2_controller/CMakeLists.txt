@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(nav2_controller)
+add_compile_options(-mmacosx-version-min=10.14)
 
 find_package(ament_cmake REQUIRED)
 find_package(nav2_core REQUIRED)

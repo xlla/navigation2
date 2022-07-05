@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(nav2_rviz_plugins)
+add_compile_options(-mmacosx-version-min=10.14)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
